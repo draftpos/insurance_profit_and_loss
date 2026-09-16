@@ -24,70 +24,15 @@
                 <field name="name">Revenue</field>
                 <field name="sequence">10</field>
                 <field name="code">INS_REV</field>
+                <field name="groupby">account_id</field>
+                <field name="foldable" eval="True"/>
                 <field name="hierarchy_level">0</field>
-            </record>
-            <record id="insurance_pnl_revenue_recurring" model="account.report.line">
-                <field name="name">Contributions - General fund (Recurring business)</field>
-                <field name="sequence">11</field>
-                <field name="code">INS_REV_REC</field>
-                <field name="parent_id" ref="insurance_pnl_revenue"/>
-                <field name="hierarchy_level">1</field>
-                <field name="groupby">account_id</field>
-                <field name="foldable" eval="True"/>
                 <field name="expression_ids">
-                    <record id="insurance_pnl_revenue_recurring_balance" model="account.report.expression">
+                    <record id="insurance_pnl_revenue_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
-                        <field name="formula" eval="[('account_id.account_type', 'in', ('income', 'income_other')), ('account_id.insurance_report_category', '=', False), ('partner_id.is_recurring_business', '=', True)]"/>
+                        <field name="formula" eval="[('account_id.account_type', 'in', ('income', 'income_other'))]"/>
                         <field name="subformula">-sum</field>
-                    </record>
-                </field>
-            </record>
-            <record id="insurance_pnl_revenue_new" model="account.report.line">
-                <field name="name">Contributions - General fund (New business)</field>
-                <field name="sequence">12</field>
-                <field name="code">INS_REV_NEW</field>
-                <field name="parent_id" ref="insurance_pnl_revenue"/>
-                <field name="hierarchy_level">1</field>
-                <field name="groupby">account_id</field>
-                <field name="foldable" eval="True"/>
-                <field name="expression_ids">
-                    <record id="insurance_pnl_revenue_new_balance" model="account.report.expression">
-                        <field name="label">balance</field>
-                        <field name="engine">domain</field>
-                        <field name="formula" eval="[('account_id.account_type', 'in', ('income', 'income_other')), ('account_id.insurance_report_category', '=', False), ('partner_id.is_recurring_business', '=', False)]"/>
-                        <field name="subformula">-sum</field>
-                    </record>
-                </field>
-            </record>
-            <record id="insurance_pnl_revenue_managed" model="account.report.line">
-                <field name="name">Contributions - Managed fund</field>
-                <field name="sequence">13</field>
-                <field name="code">INS_REV_MAN</field>
-                <field name="parent_id" ref="insurance_pnl_revenue"/>
-                <field name="hierarchy_level">1</field>
-                <field name="groupby">account_id</field>
-                <field name="foldable" eval="True"/>
-                <field name="expression_ids">
-                    <record id="insurance_pnl_revenue_managed_balance" model="account.report.expression">
-                        <field name="label">balance</field>
-                        <field name="engine">domain</field>
-                        <field name="formula" eval="[('account_id.insurance_report_category', '=', 'managed_fund')]"/>
-                        <field name="subformula">-sum</field>
-                    </record>
-                </field>
-            </record>
-            <record id="insurance_pnl_total_revenue" model="account.report.line">
-                <field name="name">Total Revenue</field>
-                <field name="sequence">19</field>
-                <field name="code">INS_TOT_REV</field>
-                <field name="parent_id" ref="insurance_pnl_revenue"/>
-                <field name="hierarchy_level">1</field>
-                <field name="expression_ids">
-                    <record id="insurance_pnl_total_revenue_balance" model="account.report.expression">
-                        <field name="label">balance</field>
-                        <field name="engine">aggregation</field>
-                        <field name="formula">INS_REV_REC.balance + INS_REV_NEW.balance + INS_REV_MAN.balance</field>
                     </record>
                 </field>
             </record>
@@ -97,9 +42,9 @@
                 <field name="name">Direct Expenses</field>
                 <field name="sequence">20</field>
                 <field name="code">INS_DIR_EXP</field>
-                <field name="hierarchy_level">0</field>
                 <field name="groupby">account_id</field>
                 <field name="foldable" eval="True"/>
+                <field name="hierarchy_level">0</field>
                 <field name="expression_ids">
                     <record id="insurance_pnl_direct_expenses_balance" model="account.report.expression">
                         <field name="label">balance</field>
@@ -121,7 +66,7 @@
                     <record id="insurance_pnl_net_cash_flow_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">aggregation</field>
-                        <field name="formula">INS_TOT_REV.balance - INS_DIR_EXP.balance</field>
+                        <field name="formula">INS_REV.balance - INS_DIR_EXP.balance</field>
                     </record>
                 </field>
             </record>
@@ -131,9 +76,9 @@
                 <field name="name">Operating Expenses</field>
                 <field name="sequence">40</field>
                 <field name="code">INS_OP_EXP</field>
-                <field name="hierarchy_level">0</field>
                 <field name="groupby">account_id</field>
                 <field name="foldable" eval="True"/>
+                <field name="hierarchy_level">0</field>
                 <field name="expression_ids">
                     <record id="insurance_pnl_operating_expenses_balance" model="account.report.expression">
                         <field name="label">balance</field>
@@ -151,55 +96,16 @@
                 <field name="name">Other Operating Expenses</field>
                 <field name="sequence">50</field>
                 <field name="code">INS_OTH_OP</field>
+                <field name="groupby">account_id</field>
+                <field name="foldable" eval="True"/>
                 <field name="hierarchy_level">0</field>
-            </record>
-            <record id="insurance_pnl_mgt_general" model="account.report.line">
-                <field name="name">Management fees - General fund</field>
-                <field name="sequence">51</field>
-                <field name="code">INS_MGT_GEN</field>
-                <field name="parent_id" ref="insurance_pnl_other_operating_expenses"/>
-                <field name="hierarchy_level">1</field>
-                <field name="groupby">account_id</field>
-                <field name="foldable" eval="True"/>
                 <field name="expression_ids">
-                    <record id="insurance_pnl_mgt_general_balance" model="account.report.expression">
+                    <record id="insurance_pnl_other_operating_expenses_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
-                        <field name="formula" eval="[('account_id.insurance_report_category', '=', 'management_fees_general')]"/>
+                        <field name="formula" eval="[('account_id.insurance_report_category', 'in', ('management_fees_general', 'management_fees_managed'))]"/>
                         <field name="subformula">sum</field>
                         <field name="green_on_positive" eval="False"/>
-                    </record>
-                </field>
-            </record>
-            <record id="insurance_pnl_mgt_managed" model="account.report.line">
-                <field name="name">Management fees - Managed fund</field>
-                <field name="sequence">52</field>
-                <field name="code">INS_MGT_MAN</field>
-                <field name="parent_id" ref="insurance_pnl_other_operating_expenses"/>
-                <field name="hierarchy_level">1</field>
-                <field name="groupby">account_id</field>
-                <field name="foldable" eval="True"/>
-                <field name="expression_ids">
-                    <record id="insurance_pnl_mgt_managed_balance" model="account.report.expression">
-                        <field name="label">balance</field>
-                        <field name="engine">domain</field>
-                        <field name="formula" eval="[('account_id.insurance_report_category', '=', 'management_fees_managed')]"/>
-                        <field name="subformula">sum</field>
-                        <field name="green_on_positive" eval="False"/>
-                    </record>
-                </field>
-            </record>
-            <record id="insurance_pnl_total_other_operating_expenses" model="account.report.line">
-                <field name="name">Total Other Operating Expenses</field>
-                <field name="sequence">59</field>
-                <field name="code">INS_TOT_OTH_OP</field>
-                <field name="parent_id" ref="insurance_pnl_other_operating_expenses"/>
-                <field name="hierarchy_level">1</field>
-                <field name="expression_ids">
-                    <record id="insurance_pnl_total_other_operating_expenses_balance" model="account.report.expression">
-                        <field name="label">balance</field>
-                        <field name="engine">aggregation</field>
-                        <field name="formula">INS_MGT_GEN.balance + INS_MGT_MAN.balance</field>
                     </record>
                 </field>
             </record>
@@ -214,7 +120,7 @@
                     <record id="insurance_pnl_operating_surplus_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">aggregation</field>
-                        <field name="formula">INS_NET_CF.balance - INS_OP_EXP.balance - INS_TOT_OTH_OP.balance</field>
+                        <field name="formula">INS_NET_CF.balance - INS_OP_EXP.balance - INS_OTH_OP.balance</field>
                     </record>
                 </field>
             </record>
@@ -224,53 +130,15 @@
                 <field name="name">Total Investment Income</field>
                 <field name="sequence">70</field>
                 <field name="code">INS_INV_INC</field>
+                <field name="groupby">account_id</field>
+                <field name="foldable" eval="True"/>
                 <field name="hierarchy_level">0</field>
-            </record>
-            <record id="insurance_pnl_other_income" model="account.report.line">
-                <field name="name">Other income</field>
-                <field name="sequence">71</field>
-                <field name="code">INS_OTH_INC</field>
-                <field name="parent_id" ref="insurance_pnl_investment_income"/>
-                <field name="hierarchy_level">1</field>
-                <field name="groupby">account_id</field>
-                <field name="foldable" eval="True"/>
                 <field name="expression_ids">
-                    <record id="insurance_pnl_other_income_balance" model="account.report.expression">
+                    <record id="insurance_pnl_investment_income_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
-                        <field name="formula" eval="[('account_id.insurance_report_category', '=', 'other_income')]"/>
+                        <field name="formula" eval="[('account_id.insurance_report_category', 'in', ('other_income', 'unrealised_profit'))]"/>
                         <field name="subformula">-sum</field>
-                    </record>
-                </field>
-            </record>
-            <record id="insurance_pnl_unrealised_profit" model="account.report.line">
-                <field name="name">Unrealised profit on equities-Shortfall Fund</field>
-                <field name="sequence">72</field>
-                <field name="code">INS_UNREAL_PROF</field>
-                <field name="parent_id" ref="insurance_pnl_investment_income"/>
-                <field name="hierarchy_level">1</field>
-                <field name="groupby">account_id</field>
-                <field name="foldable" eval="True"/>
-                <field name="expression_ids">
-                    <record id="insurance_pnl_unrealised_profit_balance" model="account.report.expression">
-                        <field name="label">balance</field>
-                        <field name="engine">domain</field>
-                        <field name="formula" eval="[('account_id.insurance_report_category', '=', 'unrealised_profit')]"/>
-                        <field name="subformula">-sum</field>
-                    </record>
-                </field>
-            </record>
-            <record id="insurance_pnl_total_investment_income" model="account.report.line">
-                <field name="name">Total Investment Income Calculation</field>
-                <field name="sequence">79</field>
-                <field name="code">INS_TOT_INV_INC</field>
-                <field name="parent_id" ref="insurance_pnl_investment_income"/>
-                <field name="hierarchy_level">1</field>
-                <field name="expression_ids">
-                    <record id="insurance_pnl_total_investment_income_balance" model="account.report.expression">
-                        <field name="label">balance</field>
-                        <field name="engine">aggregation</field>
-                        <field name="formula">INS_OTH_INC.balance + INS_UNREAL_PROF.balance</field>
                     </record>
                 </field>
             </record>
@@ -285,7 +153,7 @@
                     <record id="insurance_pnl_surplus_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">aggregation</field>
-                        <field name="formula">INS_OP_SURP.balance + INS_TOT_INV_INC.balance</field>
+                        <field name="formula">INS_OP_SURP.balance + INS_INV_INC.balance</field>
                     </record>
                 </field>
             </record>
