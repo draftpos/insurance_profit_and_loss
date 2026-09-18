@@ -9,8 +9,12 @@
 # Default to the standard action
 action = env.ref('account_reports.action_account_report_pl').read()[0]
 
-if env.company.enable_insurance_pnl_format:
+if getattr(env.company, 'enable_insurance_pnl_format', False):
     custom_report = env.ref('insurance_profit_and_loss.insurance_profit_and_loss', raise_if_not_found=False)
+    if custom_report:
+        action['context'] = {'report_id': custom_report.id}
+elif getattr(env.company, 'hao_custom_pnl_format', False):
+    custom_report = env.ref('havano_all_in_one.hao_profit_and_loss', raise_if_not_found=False)
     if custom_report:
         action['context'] = {'report_id': custom_report.id}
 
