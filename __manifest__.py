@@ -3,8 +3,10 @@
     "version": "19.0.1.0.0",
     "category": "Accounting",
     "summary": "Custom dynamic Profit and Loss report for Insurance logic",
-    "author": "Havano",
+    "author": "DraftPOS / Havano Solutions",
+    "website": "https://draftpos.com",
     "license": "LGPL-3",
+    "images": ["static/description/icon.png"],
     "depends": [
         "base",
         "account",
